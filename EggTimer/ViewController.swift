@@ -13,7 +13,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var progressBar: UIProgressView!
     @IBOutlet weak var doneLabel: UILabel!
     @IBOutlet weak var timerLabel: UIStackView!
-    var secondsRemaining = 60
+    var totalTime: Int = 0
+    var secondsPassed: Int = 0
     var timer = Timer()
     let eggTimes: [String : Int] = [
         "Soft" : 3,
@@ -26,22 +27,23 @@ class ViewController: UIViewController {
     @IBAction func hardnessSelected(_ sender: UIButton) {
 
 
-        progressBar.setProgress(0.5, animated: true)
+//        progressBar.setProgress(0.5, animated: true)
+        progressBar.progress = 0
         timer.invalidate()
-
         doneLabel.isHidden = true
         let hardness = sender.currentTitle!
-        secondsRemaining = eggTimes[hardness]!
-        
+        totalTime = eggTimes[hardness]!
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
 
        
     }
     @objc func updateTimer() {
-        if secondsRemaining > 0 {
-            print("Seconds remaining \(secondsRemaining)")
-            secondsRemaining -= 1
-//            self.timerLabel.text = "\(secondsRemaining)"
+        if secondsPassed < totalTime {
+            let percentageProgress = secondsPassed / totalTime
+            print(totalTime)
+            progressBar.progress = Float(percentageProgress)
+            secondsPassed += 1
+
         } else {
             timer.invalidate()
             doneLabel.isHidden = false
