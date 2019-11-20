@@ -9,7 +9,9 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
+    override func viewDidLoad() {
+        progressBar.progress = 0
+    }
     @IBOutlet weak var progressBar: UIProgressView!
     @IBOutlet weak var doneLabel: UILabel!
     @IBOutlet weak var timerLabel: UIStackView!
@@ -25,28 +27,28 @@ class ViewController: UIViewController {
    
 
     @IBAction func hardnessSelected(_ sender: UIButton) {
-
-
-//        progressBar.setProgress(0.5, animated: true)
         progressBar.progress = 0
         timer.invalidate()
         doneLabel.isHidden = true
         let hardness = sender.currentTitle!
         totalTime = eggTimes[hardness]!
+        progressBar.progress = 0
+        secondsPassed = 0
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
 
        
     }
     @objc func updateTimer() {
         if secondsPassed < totalTime {
-            let percentageProgress = secondsPassed / totalTime
-            print(totalTime)
-            progressBar.progress = Float(percentageProgress)
             secondsPassed += 1
+            let percentageProgress: Float = Float(secondsPassed) / Float(totalTime)
+            progressBar.setProgress(percentageProgress, animated: true)
+            
 
         } else {
             timer.invalidate()
             doneLabel.isHidden = false
+            
         }
     }
     
